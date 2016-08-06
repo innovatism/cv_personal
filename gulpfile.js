@@ -24,6 +24,17 @@ gulp.task('compress', ['reset:dist'], (done) => {
   const outputFile = 'coaxial-resume.zip';
   const archivePath = path.resolve(distPath, outputFile);
 
-  return gulp.src(inputFile)
-    .pipe(exec(`zip --password ${password} ${archivePath} ${inputFile}`))
+  exec(`zip --password ${password} ${archivePath} ${inputFile}`, (err, stdout, stderr) => {
+    if (stderr) {
+      console.error(stderr);
+    }
+
+    if (err) {
+      // Usually fails because it can't find the PDF file
+      // TODO: Possible to make it a gulp output with timestamp etc?
+      console.error('⚠️  Did you forget to run pdflatex?');
+    }
+
+    return done(err);
+  });
 });
