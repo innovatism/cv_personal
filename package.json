@@ -20,6 +20,6 @@
   "homepage": "https://bitbucket.org/coaxial/resume#readme",
   "devDependencies": {
     "del": "^2.2.1",
-    "gulp-s3": "^0.3.0"
+    "gulp-s3": "^0.3.0",
   }
 }

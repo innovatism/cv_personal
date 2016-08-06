@@ -3,6 +3,7 @@ const del = require('del');
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
+const s3 = require('gulp-s3');
 
 // Common configuration
 const distDirname = 'dist';
@@ -41,4 +42,17 @@ gulp.task('compress', ['reset:dist'], (done) => {
 
     return done(err);
   });
+});
+
+gulp.task('upload:s3', () => {
+  const awsConfig = JSON.parse(fs.readFileSync('./aws_config.json'));
+  const options = {
+    headers: {
+      'x-amz-storage-class': 'STANDARD_IA', // Cheaper zone for infrequent access
+      'x-amz-acl': 'public-read' // Owner has full control, public is read only: https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl
+    }
+  };
+
+  return gulp.src(archivePath)
+    .pipe(s3(awsConfig, options));
 });
