@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 const s3 = require('gulp-s3');
+const runSequence = require('run-sequence');
 
 // Common configuration
 const distDirname = 'dist';
@@ -11,12 +12,22 @@ const resumeFilename = 'pierre-yves_poujade.pdf';
 const archiveFilename = 'coaxial-resume.zip';
 const archivePath = path.resolve(distDirname, archiveFilename);
 
+//
+// "Porcelain" tasks
+//
 gulp.task('default', () => {
   console.log('Available tasks:');
   console.log('  compress – Pack resumé into an archive and password protect it');
   console.log(`  reset:dist – Empty ${distDirname}${path.sep}`);
 });
 
+gulp.task('publish', (done) => {
+  runSequence('compress', 'upload:s3', done);
+});
+
+//
+// "Plumbing" tasks
+//
 gulp.task('reset:dist', () => {
   // Not the gulp way, but I don't want to screw around with pipes etc.
   del.sync([distDirname]);
@@ -40,7 +51,7 @@ gulp.task('compress', ['reset:dist'], (done) => {
       console.error('⚠️  Did you forget to run pdflatex?');
     }
 
-    return done(err);
+    done(err);
   });
 });
 
