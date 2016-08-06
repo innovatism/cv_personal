@@ -1,0 +1,25 @@
+{
+  "name": "resume",
+  "version": "1.0.0",
+  "description": "My résumé, in LaTeX format, along with supporting Gulp tasks.",
+  "main": "gulp",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/coaxial/resume.git"
+  },
+  "keywords": [
+    "resume",
+    "cv",
+    "résumé"
+  ],
+  "author": "Coaxial <py@poujade.org>",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/coaxial/resume#readme",
+  "devDependencies": {
+    "del": "^2.2.1",
+    "gulp-s3": "^0.3.0"
+  }
+}
