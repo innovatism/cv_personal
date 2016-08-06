@@ -4,18 +4,22 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
-const distPath = 'dist';
+// Common configuration
+const distDirname = 'dist';
+const resumeFilename = 'pierre-yves_poujade.pdf';
+const archiveFilename = 'coaxial-resume.zip';
+const archivePath = path.resolve(distDirname, archiveFilename);
 
 gulp.task('default', () => {
   console.log('Available tasks:');
-  console.log('  `compress`: Pack resumé into an archive and password protect it');
-  console.log('  `reset:dist`: Empty dist/');
+  console.log('  compress – Pack resumé into an archive and password protect it');
+  console.log(`  reset:dist – Empty ${distDirname}${path.sep}`);
 });
 
 gulp.task('reset:dist', () => {
   // Not the gulp way, but I don't want to screw around with pipes etc.
-  del.sync(['dist']);
-  fs.mkdirSync(distPath);
+  del.sync([distDirname]);
+  fs.mkdirSync(distDirname);
 });
 
 gulp.task('compress', ['reset:dist'], (done) => {
@@ -24,7 +28,7 @@ gulp.task('compress', ['reset:dist'], (done) => {
   const outputFile = 'coaxial-resume.zip';
   const archivePath = path.resolve(distPath, outputFile);
 
-  exec(`zip --password ${password} ${archivePath} ${inputFile}`, (err, stdout, stderr) => {
+  exec(`zip --password ${password} ${archivePath} ${resumeFilename}`, (err, stdout, stderr) => {
     if (stderr) {
       console.error(stderr);
     }
