@@ -2,12 +2,14 @@ const gulp = require('gulp');
 const del = require('del');
 const fs = require('fs');
 const path = require('path');
-const exec = require('gulp-exec');
+const exec = require('child_process').exec;
 
 const distPath = 'dist';
 
 gulp.task('default', () => {
-  // place code for your default task here
+  console.log('Available tasks:');
+  console.log('  `compress`: Pack resumé into an archive and password protect it');
+  console.log('  `reset:dist`: Empty dist/');
 });
 
 gulp.task('reset:dist', () => {
