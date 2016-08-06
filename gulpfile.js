@@ -5,11 +5,15 @@ const path = require('path');
 const exec = require('child_process').exec;
 const s3 = require('gulp-s3');
 const runSequence = require('run-sequence');
+const gutil = require("gulp-util");
 
+//
 // Common configuration
+//
+const config = JSON.parse(fs.readFileSync('./config.json'));
 const distDirname = 'dist';
-const resumeFilename = 'pierre-yves_poujade.pdf';
-const archiveFilename = 'coaxial-resume.zip';
+const resumeFilename = config.resume_filename || 'resume.pdf';
+const archiveFilename = config.archive_filename || 'resume.zip';
 const archivePath = path.resolve(distDirname, archiveFilename);
 
 //
@@ -28,27 +32,38 @@ gulp.task('publish', (done) => {
 //
 // "Plumbing" tasks
 //
-gulp.task('reset:dist', () => {
-  // Not the gulp way, but I don't want to screw around with pipes etc.
-  del.sync([distDirname]);
-  fs.mkdirSync(distDirname);
+gulp.task('dist:reset', (done) => {
+  // Task necessary because I can't use gulp.dest with the compress task, since
+  // zip can't be streamed at/to
+  runSequence('dist:del', 'dist:mk', done);
 });
 
-gulp.task('compress', ['reset:dist'], (done) => {
-  const inputFile = 'pierre-yves_poujade.pdf';
-  const password = 'redacted';
-  const outputFile = 'coaxial-resume.zip';
-  const archivePath = path.resolve(distPath, outputFile);
+gulp.task('dist:del', () => {
+  return del([distDirname]);
+});
+
+gulp.task('dist:mk', (done) => {
+  return fs.mkdir(distDirname, done);
+});
+
+gulp.task('compress', ['dist:reset'], (done) => {
+  const password = config.archive_password;
+
+  if (password == undefined) {
+    throw new gutil.PluginError({
+      plugin: 'compress',
+      message: gutil.log(gutil.colors.red('No password set in config.json for archive!'))
+    });
+  };
 
   exec(`zip --password ${password} ${archivePath} ${resumeFilename}`, (err, stdout, stderr) => {
     if (stderr) {
-      console.error(stderr);
+      gutil.log(gutil.colors.red(stderr));
     }
 
     if (err) {
       // Usually fails because it can't find the PDF file
-      // TODO: Possible to make it a gulp output with timestamp etc?
-      console.error('⚠️  Did you forget to run pdflatex?');
+      gutil.log(gutil.colors.yellow('⚠️  Did you forget to run pdflatex?'));
     }
 
     done(err);
@@ -60,7 +75,8 @@ gulp.task('upload:s3', () => {
   const options = {
     headers: {
       'x-amz-storage-class': 'STANDARD_IA', // Cheaper zone for infrequent access
-      'x-amz-acl': 'public-read' // Owner has full control, public is read only: https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl
+      'x-amz-acl': 'public-read' // Owner has full control, public is read
+      // only: https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl
     }
   };
 
