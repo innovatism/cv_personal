@@ -6,7 +6,7 @@ PATTERN="*.tex"
 IGNORED_TEX_FILE="structure.tex"
 IGNORED_FOLDER="*node_modules/*"
 
-BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
+BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/../src && pwd )"
 TEX_FILE_LIST=$(find . -type f -not -path "$IGNORED_FOLDER" \( -iname "*.tex" ! -iname "$IGNORED_TEX_FILE" \))
 
 for texFile in $TEX_FILE_LIST; do 

@@ -1,5 +1,7 @@
 {
   "resume_filename": "my_resume.pdf",
   "archive_filename": "resume.zip",
-  "archive_password": "SuperSecret!"
+  "archive_password": "SuperSecret!",
+  "dist_dir": "dist",
+  "src_dir": "src"
 }
