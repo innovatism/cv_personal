@@ -6,7 +6,8 @@ const exec = require('child_process').exec;
 const s3 = require('gulp-s3');
 const runSequence = require('run-sequence');
 const gutil = require("gulp-util");
-const shell = require("gulp-shell");
+
+require('./tasks/latex')(gulp);
 
 //
 // Common configuration
@@ -97,12 +98,3 @@ gulp.task('upload:s3', () => {
   return gulp.src(archivePath)
     .pipe(s3(awsConfig, options));
 });
-
-gulp.task('compile', (done) => {
-  gutil.log('🖨  Change detected, recompiling!');
-  runSequence('latex2pdf', done);
-});
-
-gulp.task('latex2pdf', shell.task([
-    'bash lib/pdf_all.sh'
-]));
