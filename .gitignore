@@ -2,3 +2,4 @@
 *.log
 *.out
 aws_config.json
+config.json
