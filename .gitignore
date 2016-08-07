@@ -1,3 +1,6 @@
 *.aux
 *.log
 *.out
+aws_config.json
+config.json
+dist/
