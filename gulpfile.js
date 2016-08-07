@@ -67,6 +67,8 @@ gulp.task('compress', ['dist:reset'], (done) => {
     });
   };
 
+  gutil.log(`📦  Packing with password '${password}'`);
+
   exec(`zip --password ${password} ${archivePath} ${resumeFilename}`, (err, stdout, stderr) => {
     if (stderr) {
       gutil.log(gutil.colors.red(stderr));
@@ -91,6 +93,7 @@ gulp.task('upload:s3', () => {
     }
   };
 
+  gutil.log('🛰  Putting file on S3');
   return gulp.src(archivePath)
     .pipe(s3(awsConfig, options));
 });
