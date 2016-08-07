@@ -1,10 +1,6 @@
 const gulp = require('gulp');
-const path = require('path');
-const exec = require('child_process').exec;
-const s3 = require('gulp-s3');
 const runSequence = require('run-sequence');
 const gutil = require("gulp-util");
-const fs = require('fs');
 
 // Parse config.json
 const config = require('./tasks/config');
@@ -14,9 +10,6 @@ require('./tasks/dist')(gulp, config);
 require('./tasks/upload')(gulp, config);
 require('./tasks/pack')(gulp, config);
 
-//
-// "Porcelain" tasks
-//
 gulp.task('default', () => {
   gutil.log('');
   gutil.log('O Hai! (￣^￣)ゞ');
