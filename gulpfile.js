@@ -11,6 +11,7 @@ const config = require('./tasks/config');
 
 require('./tasks/latex')(gulp);
 require('./tasks/dist')(gulp, config);
+require('./tasks/upload')(gulp, config);
 
 //
 // "Porcelain" tasks
@@ -61,19 +62,4 @@ gulp.task('compress', ['dist:reset'], (done) => {
 
     done(err);
   });
-});
-
-gulp.task('upload:s3', () => {
-  const awsConfig = JSON.parse(fs.readFileSync('./aws_config.json'));
-  const options = {
-    headers: {
-      'x-amz-storage-class': 'STANDARD_IA', // Cheaper zone for infrequent access
-      'x-amz-acl': 'public-read' // Owner has full control, public is read
-      // only: https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl
-    }
-  };
-
-  gutil.log('🛰  Putting file on S3');
-  return gulp.src(config.archivePath)
-    .pipe(s3(awsConfig, options));
 });
