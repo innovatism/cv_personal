@@ -1,14 +1,16 @@
 const gulp = require('gulp');
-const del = require('del');
-const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 const s3 = require('gulp-s3');
 const runSequence = require('run-sequence');
 const gutil = require("gulp-util");
+const fs = require('fs');
 
+// Parse config.json
 const config = require('./tasks/config');
+
 require('./tasks/latex')(gulp);
+require('./tasks/dist')(gulp, config);
 
 //
 // "Porcelain" tasks
@@ -35,20 +37,6 @@ gulp.task('work', () => {
 //
 // "Plumbing" tasks
 //
-gulp.task('dist:reset', (done) => {
-  // Task necessary because I can't use gulp.dest with the compress task, since
-  // zip can't be streamed at/to
-  runSequence('dist:del', 'dist:mk', done);
-});
-
-gulp.task('dist:del', () => {
-  return del([config.distDirname]);
-});
-
-gulp.task('dist:mk', (done) => {
-  return fs.mkdir(config.distDirname, done);
-});
-
 gulp.task('compress', ['dist:reset'], (done) => {
   const password = config.configFile.archive_password;
 
