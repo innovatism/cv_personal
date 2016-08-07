@@ -6,6 +6,7 @@ const exec = require('child_process').exec;
 const s3 = require('gulp-s3');
 const runSequence = require('run-sequence');
 const gutil = require("gulp-util");
+const shell = require("gulp-shell");
 
 //
 // Common configuration
@@ -13,6 +14,7 @@ const gutil = require("gulp-util");
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const distDirname = 'dist';
 const resumeFilename = config.resume_filename || 'resume.pdf';
+const texFilename = path.parse(config.resume_filename).name + '.tex' || 'resume.tex';
 const archiveFilename = config.archive_filename || 'resume.zip';
 const archivePath = path.resolve(distDirname, archiveFilename);
 
@@ -20,13 +22,22 @@ const archivePath = path.resolve(distDirname, archiveFilename);
 // "Porcelain" tasks
 //
 gulp.task('default', () => {
-  console.log('Available tasks:');
-  console.log('  compress – Pack resumé into an archive and password protect it');
-  console.log(`  reset:dist – Empty ${distDirname}${path.sep}`);
+  gutil.log('');
+  gutil.log('O Hai! (￣^￣)ゞ');
+  gutil.log('');
+  gutil.log('👉  Run `gulp work` to recompile tex document to pdf as it changes');
+  gutil.log('👉  Run `gulp publish` to pack, encrypt, and upload pdf');
+  gutil.log('');
+  gutil.log('Good hunting!');
+  gutil.log('');
 });
 
 gulp.task('publish', (done) => {
   runSequence('compress', 'upload:s3', done);
+});
+
+gulp.task('work', () => {
+  gulp.watch(texFilename, ['compile'], { read: false });
 });
 
 //
@@ -83,3 +94,12 @@ gulp.task('upload:s3', () => {
   return gulp.src(archivePath)
     .pipe(s3(awsConfig, options));
 });
+
+gulp.task('compile', (done) => {
+  gutil.log('🖨  Change detected, recompiling!');
+  runSequence('latex2pdf', done);
+});
+
+gulp.task('latex2pdf', shell.task([
+    'bash lib/pdf_all.sh'
+]));
