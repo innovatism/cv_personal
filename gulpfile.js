@@ -26,5 +26,5 @@ gulp.task('publish', (done) => {
 });
 
 gulp.task('work', () => {
-  gulp.watch(config.texFilename, ['compile'], { read: false });
+  gulp.watch(config.texPath, ['compile'], { read: false });
 });

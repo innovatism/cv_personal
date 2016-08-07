@@ -14,7 +14,7 @@ module.exports = (gulp, config) => {
 
     gutil.log(`📦  Packing with password '${password}'`);
 
-    exec(`zip --password ${password} ${config.archivePath} ${config.resumeFilename}`, (err, stdout, stderr) => {
+    exec(`zip --junk-paths --password ${password} ${config.archivePath} ${config.resumePath}`, (err, stdout, stderr) => {
       if (stderr) {
         gutil.log(gutil.colors.red(stderr));
       }
