@@ -7,17 +7,8 @@ const s3 = require('gulp-s3');
 const runSequence = require('run-sequence');
 const gutil = require("gulp-util");
 
+const config = require('./tasks/config');
 require('./tasks/latex')(gulp);
-
-//
-// Common configuration
-//
-const config = JSON.parse(fs.readFileSync('./config.json'));
-const distDirname = 'dist';
-const resumeFilename = config.resume_filename || 'resume.pdf';
-const texFilename = path.parse(config.resume_filename).name + '.tex' || 'resume.tex';
-const archiveFilename = config.archive_filename || 'resume.zip';
-const archivePath = path.resolve(distDirname, archiveFilename);
 
 //
 // "Porcelain" tasks
@@ -38,7 +29,7 @@ gulp.task('publish', (done) => {
 });
 
 gulp.task('work', () => {
-  gulp.watch(texFilename, ['compile'], { read: false });
+  gulp.watch(config.texFilename, ['compile'], { read: false });
 });
 
 //
@@ -51,26 +42,26 @@ gulp.task('dist:reset', (done) => {
 });
 
 gulp.task('dist:del', () => {
-  return del([distDirname]);
+  return del([config.distDirname]);
 });
 
 gulp.task('dist:mk', (done) => {
-  return fs.mkdir(distDirname, done);
+  return fs.mkdir(config.distDirname, done);
 });
 
 gulp.task('compress', ['dist:reset'], (done) => {
-  const password = config.archive_password;
+  const password = config.configFile.archive_password;
 
   if (password == undefined) {
     throw new gutil.PluginError({
       plugin: 'compress',
-      message: gutil.log(gutil.colors.red('No password set in config.json for archive!'))
+      message: gutil.log(gutil.colors.red('No password set in config.json for archive, aborting!'))
     });
   };
 
   gutil.log(`📦  Packing with password '${password}'`);
 
-  exec(`zip --password ${password} ${archivePath} ${resumeFilename}`, (err, stdout, stderr) => {
+  exec(`zip --password ${password} ${config.archivePath} ${config.resumeFilename}`, (err, stdout, stderr) => {
     if (stderr) {
       gutil.log(gutil.colors.red(stderr));
     }
@@ -95,6 +86,6 @@ gulp.task('upload:s3', () => {
   };
 
   gutil.log('🛰  Putting file on S3');
-  return gulp.src(archivePath)
+  return gulp.src(config.archivePath)
     .pipe(s3(awsConfig, options));
 });
