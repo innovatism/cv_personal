@@ -12,6 +12,7 @@ const config = require('./tasks/config');
 require('./tasks/latex')(gulp);
 require('./tasks/dist')(gulp, config);
 require('./tasks/upload')(gulp, config);
+require('./tasks/pack')(gulp, config);
 
 //
 // "Porcelain" tasks
@@ -28,38 +29,9 @@ gulp.task('default', () => {
 });
 
 gulp.task('publish', (done) => {
-  runSequence('compress', 'upload:s3', done);
+  runSequence('pack:zip', 'upload:s3', done);
 });
 
 gulp.task('work', () => {
   gulp.watch(config.texFilename, ['compile'], { read: false });
-});
-
-//
-// "Plumbing" tasks
-//
-gulp.task('compress', ['dist:reset'], (done) => {
-  const password = config.configFile.archive_password;
-
-  if (password == undefined) {
-    throw new gutil.PluginError({
-      plugin: 'compress',
-      message: gutil.log(gutil.colors.red('No password set in config.json for archive, aborting!'))
-    });
-  };
-
-  gutil.log(`📦  Packing with password '${password}'`);
-
-  exec(`zip --password ${password} ${config.archivePath} ${config.resumeFilename}`, (err, stdout, stderr) => {
-    if (stderr) {
-      gutil.log(gutil.colors.red(stderr));
-    }
-
-    if (err) {
-      // Usually fails because it can't find the PDF file
-      gutil.log(gutil.colors.yellow('⚠️  Did you forget to run pdflatex?'));
-    }
-
-    done(err);
-  });
 });
