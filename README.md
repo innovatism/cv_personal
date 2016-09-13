@@ -13,6 +13,10 @@ tool.
 Note that the tool will also work with any LaTeX document that you might want
 to make publicly available and password protected.  
 
+For some context about why I wrote this tool and how I'm using it, check out
+this article on Medium:
+https://medium.com/@coaxial/how-i-manage-my-cv-with-latex-gulp-s3-and-bitly-99694c01dd8
+
 ## Assumptions
 
 - Your document is written using LaTeX
