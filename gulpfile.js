@@ -22,7 +22,7 @@ gulp.task('default', () => {
 });
 
 gulp.task('publish', (done) => {
-  runSequence('pack:zip', 'upload:s3', done);
+  runSequence('compile', 'pack:zip', 'upload:s3', done);
 });
 
 gulp.task('work', () => {
