@@ -9,6 +9,7 @@ const config = {
   configFile: configFile,
   distDirname: configFile.dist_dir,
   srcDirname: configFile.src_dir,
+  srcPath: path.resolve(configFile.src_dir),
   resumeFilename: configFile.resume_filename,
   resumePath: path.resolve(configFile.src_dir, configFile.resume_filename),
   texFilename: texFilename,
