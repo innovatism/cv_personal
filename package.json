@@ -21,8 +21,10 @@
   "homepage": "https://bitbucket.org/coaxial/resume#readme",
   "devDependencies": {
     "del": "^2.2.1",
+    "gulp": "^3.9.1",
     "gulp-s3": "^0.3.0",
     "gulp-shell": "^0.5.2",
     "run-sequence": "^1.2.2"
-  }
+  },
+  "dependencies": {}
 }
