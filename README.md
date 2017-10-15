@@ -11,7 +11,7 @@ I thought this workflow might be helpful to someone else, so I open sourced the
 tool.
 
 Note that the tool will also work with any LaTeX document that you might want
-to make publicly available and password protected.  
+to make publicly available and password protected.
 
 For some context about why I wrote this tool and how I'm using it, check out
 this article on Medium:
@@ -54,7 +54,7 @@ Contains AWS specific configuration options
 | `key`    | Your AWS key                                    |
 | `secret` | Your AWS secret                                 |
 | `bucket` | Name for the S3 bucket to upload the archive to |
-| `region` | Which AWS region to save your archive in        |
+| `region` | Which AWS region to save your archive in (cf.  https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region)       |
 
 If you are unfamiliar with S3, AWS' documentation is a good starting point:
 https://aws.amazon.com/documentation/s3/
