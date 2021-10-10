@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const runSequence = require('run-sequence');
 const gutil = require("gulp-util");
 
 // Parse config.json
@@ -21,10 +20,8 @@ gulp.task('default', () => {
   gutil.log('');
 });
 
-gulp.task('publish', (done) => {
-  runSequence('compile', 'pack:zip', 'upload:s3', done);
-});
+gulp.task('publish', gulp.series('compile', 'pack:zip', 'upload:s3'));
 
 gulp.task('work', () => {
-  gulp.watch(`${config.srcPath}/**/*.{tex,cls}`, ['compile'], { read: false });
+  gulp.watch(`${config.srcPath}/**/*.{tex,cls}`, { read: false }, gulp.series('compile'));
 });

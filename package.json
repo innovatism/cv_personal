@@ -20,13 +20,15 @@
   "license": "MIT",
   "homepage": "https://github.com/coaxial/cv-tools",
   "devDependencies": {
-    "del": "^2.2.1",
-    "gulp": "^3.9.1",
-    "gulp-awspublish": "^3.3.0",
-    "gulp-shell": "^0.5.2",
-    "run-sequence": "^1.2.2"
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-awspublish": "^4.1.2",
+    "gulp-shell": "^0.8.0"
   },
   "engines": {
     "node": ">=8.6.0"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.8"
   }
 }

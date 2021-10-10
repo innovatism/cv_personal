@@ -2,7 +2,7 @@ const gutil = require('gulp-util');
 const exec = require('child_process').exec;
 
 module.exports = (gulp, config) => {
-  gulp.task('pack:zip', ['dist:reset'], (done) => {
+  gulp.task('pack:zip', gulp.series('dist:reset', (done) => {
     const password = config.configFile.archive_password;
 
     if (password == undefined) {
@@ -26,5 +26,5 @@ module.exports = (gulp, config) => {
 
       done(err);
     });
-  });
+  }));
 };
