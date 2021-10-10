@@ -22,7 +22,8 @@ https://medium.com/@coaxial/how-i-manage-my-cv-with-latex-gulp-s3-and-bitly-9969
 - Your document is written using LaTeX
 - You want a publicly accessible, passworded protected version of your document
 - You want this publicly accessible version to be hosted on S3
-- You have a working `npm` and `node` (v4 or v6) install
+- You have a working `npm` and `node` (v16+) install
+- You have installed the `texlive-latex-extra` package (or equivalent)
 
 ## Configuration
 
@@ -104,6 +105,9 @@ make a pull request. Make sure your tests pass against Node v4 and Node v6
 both; make sure you use modularization when appropriate, ES6, and promises.
 
 ## Issues
+
+If the `work` task fails to run, check that the underlying bash script is working
+properly by running it manually: `./lib/pdf_all.sh`.
 
 If you have a question or an issue using the tool, open a GitHub issue for
 help.
