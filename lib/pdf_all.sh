@@ -18,8 +18,8 @@ for texFile in $TEX_FILE_LIST; do
     cd $BASE_DIR
     directory=$(dirname "${texFile}")
     filename=$(basename "${texFile}")
-    echo "pdflatex -interaction=nonstopmode $filename"
-    pdflatex -interaction=nonstopmode $filename
+    echo "latexmk -lualatex -interaction=nonstopmode $filename"
+    latexmk -lualatex -interaction=nonstopmode $filename
 done
 
 cd $BASE_DIR

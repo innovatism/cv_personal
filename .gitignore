@@ -4,5 +4,5 @@
 aws_config.json
 config.json
 dist/
-src
 *.json~
+node_modules
