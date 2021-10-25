@@ -9,3 +9,4 @@ node_modules
 src/cv_data_scientist.fdb_latexmk
 src/cv_data_scientist.fls
 src/cv_data_scientist.pdf
+src/fonts/
